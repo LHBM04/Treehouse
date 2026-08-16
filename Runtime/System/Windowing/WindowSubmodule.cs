@@ -25,7 +25,7 @@ public class WindowSubmodule : EngineSubmodule
     /// </summary>
     public event Action<Window>? OnWindowRemoved;
 
-    internal WindowSubmodule()
+    public WindowSubmodule()
     {
         mWindows = new List<Window>();
     }
@@ -57,7 +57,7 @@ public class WindowSubmodule : EngineSubmodule
         Window window = new Window(SDL_CreateWindowWithProperties(properties));
 
         mWindows.Add(window);
-        OnWindowAdded(window);
+        OnWindowAdded?.Invoke(window);
 
         return window;
     }
@@ -70,7 +70,7 @@ public class WindowSubmodule : EngineSubmodule
     {
         if (mWindows.Remove(window))
         {
-            OnWindowRemoved.Invoke(window);
+            OnWindowRemoved?.Invoke(window);
             window.Dispose();
         }
     }
