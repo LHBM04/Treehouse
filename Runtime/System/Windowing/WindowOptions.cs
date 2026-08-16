@@ -15,7 +15,7 @@ public record class WindowOptions
     /// <summary>
     /// 생성할 창의 위치.
     /// </summary>
-    public Vector2 Position { get; set; } = Vector2.Zero;
+    public Vector2 Position { get; set; } = new Vector2(100, 100);
 
     /// <summary>
     /// 생성할 창의 크기.
@@ -25,5 +25,5 @@ public record class WindowOptions
     /// <summary>
     /// 생성할 창의 플래그.
     /// </summary>
-    public WindowFlags Flags { get; set; } = WindowFlags.None;
+    public WindowFlags Flags { get; set; } = WindowFlags.Resizable;
 }
