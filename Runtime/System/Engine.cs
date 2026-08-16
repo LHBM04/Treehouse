@@ -14,7 +14,7 @@ public class Engine : IDisposable
     /// </summary>
     private readonly List<EngineSubmodule> mSubmodules;
 
-    internal Engine()
+    public Engine()
     {
         mSubmodules = new List<EngineSubmodule>();
     }
