@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Treehouse.Runtime;
+namespace Treehouse.Runtime.System;
 
 /// <summary>
 /// 애플리케이션 내 엔진을 구현합니다.
