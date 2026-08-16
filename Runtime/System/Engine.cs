@@ -53,7 +53,7 @@ public class Engine : IDisposable
     public void AddSubmodule(Type submoduleType)
     {
         EngineSubmodule? newSubmodule = Activator.CreateInstance(submoduleType) as EngineSubmodule;
-        if (newSubmodule != null)
+        if (newSubmodule == null)
         {
             throw new ArgumentException("올바른 Submodule 타입이 아닙니다.");
         }
