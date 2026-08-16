@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using static SDL3.SDL;
+using SDL3;
 
 namespace Treehouse.Runtime.System.Windowing;
 
@@ -11,8 +11,8 @@ public class Window : IDisposable
     /// </summary>
     public string Title
     {
-        get => SDL_GetWindowTitle(Handle);
-        set => SDL_SetWindowTitle(Handle, value);
+        get => SDL.GetWindowTitle(Handle);
+        set => SDL.SetWindowTitle(Handle, value);
     }
 
     /// <summary>
@@ -22,10 +22,10 @@ public class Window : IDisposable
     {
         get
         {
-            SDL_GetWindowPosition(Handle, out int x, out int y);
+            SDL.GetWindowPosition(Handle, out int x, out int y);
             return new Vector2(x, y);
         }
-        set => SDL_SetWindowPosition(Handle, (int)value.X, (int)value.Y);
+        set => SDL.SetWindowPosition(Handle, (int)value.X, (int)value.Y);
     }
 
     /// <summary>
@@ -35,10 +35,10 @@ public class Window : IDisposable
     {
         get
         {
-            SDL_GetWindowSize(Handle, out int x, out int y);
+            SDL.GetWindowSize(Handle, out int x, out int y);
             return new Vector2(x, y);
         }
-        set => SDL_SetWindowSize(Handle, (int)value.X, (int)value.Y);
+        set => SDL.SetWindowSize(Handle, (int)value.X, (int)value.Y);
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class Window : IDisposable
     /// <summary>
     /// 해당 창의 고유 ID.
     /// </summary>
-    internal uint ID => SDL_GetWindowID(Handle);
+    internal uint ID => SDL.GetWindowID(Handle);
 
     internal Window(nint handle)
     {
@@ -63,11 +63,11 @@ public class Window : IDisposable
 
     public void Show()
     {
-        SDL_ShowWindow(Handle);
+        SDL.ShowWindow(Handle);
     }
 
     public void Close()
     {
-        SDL_HideWindow(Handle);
+        SDL.HideWindow(Handle);
     }
 }

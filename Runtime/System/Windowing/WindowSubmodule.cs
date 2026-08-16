@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-
-using static SDL3.SDL;
+using SDL3;
 
 namespace Treehouse.Runtime.System.Windowing;
 
@@ -64,24 +63,24 @@ public class WindowSubmodule : EngineSubmodule
     /// <returns></returns>
     public Window CreateWindow(WindowOptions options)
     {
-        uint properties = SDL_CreateProperties();
+        uint properties = SDL.CreateProperties();
 
-        SDL_SetStringProperty(properties, SDL_PROP_WINDOW_CREATE_TITLE_STRING, options.Title ?? "New Treehouse Window");
+        SDL.SetStringProperty(properties, "SDL_PROP_WINDOW_CREATE_TITLE_STRING", options.Title ?? "New Treehouse Window");
 
-        SDL_SetFloatProperty(properties, SDL_PROP_WINDOW_CREATE_X_NUMBER, options.Position.X);
-        SDL_SetFloatProperty(properties, SDL_PROP_WINDOW_CREATE_Y_NUMBER, options.Position.Y);
-        SDL_SetFloatProperty(properties, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, options.Size.X);
-        SDL_SetFloatProperty(properties, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, options.Size.Y);
+        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_X_NUMBER", options.Position.X);
+        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_Y_NUMBER", options.Position.Y);
+        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER", options.Size.X);
+        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER", options.Size.Y);
 
-        SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN, options.Flags.HasFlag(WindowFlags.Fullscreen));
-        SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN, options.Flags.HasFlag(WindowFlags.Resizable));
-        SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN, options.Flags.HasFlag(WindowFlags.Borderless));
-        SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_HIDDEN_BOOLEAN, options.Flags.HasFlag(WindowFlags.Hidden));
-        SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN, options.Flags.HasFlag(WindowFlags.AlwaysOnTop));
+        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN", options.Flags.HasFlag(WindowFlags.Fullscreen));
+        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN", options.Flags.HasFlag(WindowFlags.Resizable));
+        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN", options.Flags.HasFlag(WindowFlags.Borderless));
+        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_HIDDEN_BOOLEAN", options.Flags.HasFlag(WindowFlags.Hidden));
+        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN", options.Flags.HasFlag(WindowFlags.AlwaysOnTop));
 
-        SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, false);
+        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN", false);
 
-        Window window = new Window(SDL_CreateWindowWithProperties(properties));
+        Window window = new Window(SDL.CreateWindowWithProperties(properties));
         OnWindowCreated?.Invoke(window);
 
         mWindows.Add(window);
@@ -107,7 +106,7 @@ public class WindowSubmodule : EngineSubmodule
     {
         base.OnInitialize();
 
-        if (!SDL_InitSubSystem(SDL_InitFlags.SDL_INIT_VIDEO | SDL_InitFlags.SDL_INIT_EVENTS))
+        if (!SDL.InitSubSystem(SDL.InitFlags.Video | SDL.InitFlags.Events))
         {
             throw new InvalidOperationException("SDL 서브시스템 초기화에 실패했습니다!");
         }
@@ -117,32 +116,32 @@ public class WindowSubmodule : EngineSubmodule
     {
         base.OnTick();
 
-        SDL_Event @event;
-        while (SDL_PollEvent(out @event))
+        SDL.Event @event;
+        while (SDL.PollEvent(out @event))
         {
-            Window? target = mWindows.FirstOrDefault(window => window.ID == @event.window.windowID);
+            Window? target = mWindows.FirstOrDefault(window => window.ID == @event.Window.WindowID);
             
-            switch ((SDL_EventType)@event.type)
+            switch ((SDL.EventType)@event.Type)
             {
-                case SDL_EventType.SDL_EVENT_WINDOW_MOVED:
+                case SDL.EventType.WindowMoved:
                 {
                     if (target != null)
                     {
-                        OnWindowMoved?.Invoke(target, new Vector2(@event.window.data1, @event.window.data2));
+                        OnWindowMoved?.Invoke(target, new Vector2(@event.Window.Data1, @event.Window.Data2));
                     }
 
                     break;
                 }
-                case SDL_EventType.SDL_EVENT_WINDOW_RESIZED:
+                case SDL.EventType.WindowResized:
                 {
                     if (target != null)
                     {
-                        OnWindowResized?.Invoke(target, new Vector2(@event.window.data1, @event.window.data2));
+                        OnWindowResized?.Invoke(target, new Vector2(@event.Window.Data1, @event.Window.Data2));
                     }
 
                     break;
                 }
-                case SDL_EventType.SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+                case SDL.EventType.WindowCloseRequested:
                 {
                     if (target != null)
                     {
@@ -152,7 +151,7 @@ public class WindowSubmodule : EngineSubmodule
 
                     break;
                 }
-                case SDL_EventType.SDL_EVENT_WINDOW_FOCUS_GAINED:
+                case SDL.EventType.WindowFocusGained:
                 {
                     if (target != null)
                     {
@@ -161,7 +160,7 @@ public class WindowSubmodule : EngineSubmodule
 
                     break;
                 }
-                case SDL_EventType.SDL_EVENT_WINDOW_FOCUS_LOST:
+                case SDL.EventType.WindowFocusLost:
                 {
                     if (target != null)
                     {
@@ -186,6 +185,6 @@ public class WindowSubmodule : EngineSubmodule
 
         mWindows.Clear();
 
-        SDL_QuitSubSystem(SDL_InitFlags.SDL_INIT_VIDEO | SDL_InitFlags.SDL_INIT_EVENTS);
+        SDL.QuitSubSystem(SDL.InitFlags.Video | SDL.InitFlags.Events);
     }
 }
