@@ -35,7 +35,7 @@ public class Engine : IDisposable
     /// <summary>
     /// 매 프레임마다 호출됩니다.
     /// </summary>
-    internal void Tick()
+    public void Tick()
     {
         if (mSubmodules.Any())
         {
