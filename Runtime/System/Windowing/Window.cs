@@ -1,9 +1,8 @@
 using System;
 using System.Numerics;
-
 using static SDL3.SDL;
 
-namespace Treehouse.Runtime.System;
+namespace Treehouse.Runtime.System.Windowing;
 
 public class Window : IDisposable
 {

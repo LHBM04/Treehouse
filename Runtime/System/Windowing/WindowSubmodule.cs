@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using static SDL3.SDL;
 
-namespace Treehouse.Runtime.System;
+namespace Treehouse.Runtime.System.Windowing;
 
 /// <summary>
 /// 애플리케이션 내 창을 제어하는 서브모듈을 정의합니다.
