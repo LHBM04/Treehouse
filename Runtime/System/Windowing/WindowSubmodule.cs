@@ -65,20 +65,22 @@ public class WindowSubmodule : EngineSubmodule
     {
         uint properties = SDL.CreateProperties();
 
-        SDL.SetStringProperty(properties, "SDL_PROP_WINDOW_CREATE_TITLE_STRING", options.Title ?? "New Treehouse Window");
+        SDL.SetStringProperty(properties, SDL.Props.WindowCreateTitleString, options.Title);
 
-        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_X_NUMBER", options.Position.X);
-        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_Y_NUMBER", options.Position.Y);
-        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER", options.Size.X);
-        SDL.SetFloatProperty(properties, "SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER", options.Size.Y);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateYNumber, options.Position.X);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateXNumber, options.Position.Y);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateWidthNumber, options.Size.X);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateHeightNumber, options.Size.Y);
 
-        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN", options.Flags.HasFlag(WindowFlags.Fullscreen));
-        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_RESIZABLE_BOOLEAN", options.Flags.HasFlag(WindowFlags.Resizable));
-        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_BORDERLESS_BOOLEAN", options.Flags.HasFlag(WindowFlags.Borderless));
-        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_HIDDEN_BOOLEAN", options.Flags.HasFlag(WindowFlags.Hidden));
-        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_ALWAYS_ON_TOP_BOOLEAN", options.Flags.HasFlag(WindowFlags.AlwaysOnTop));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateFullscreenBoolean, options.Flags.HasFlag(WindowFlags.Fullscreen));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateResizableBoolean, options.Flags.HasFlag(WindowFlags.Resizable));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateBorderlessBoolean, options.Flags.HasFlag(WindowFlags.Borderless));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHiddenBoolean, options.Flags.HasFlag(WindowFlags.Hidden));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateAlwaysOnTopBoolean, options.Flags.HasFlag(WindowFlags.AlwaysOnTop));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateMaximizedBoolean, options.Flags.HasFlag(WindowFlags.Maximized));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateMaximizedBoolean, options.Flags.HasFlag(WindowFlags.Minimized));
 
-        SDL.SetBooleanProperty(properties, "SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN", false);
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHighPixelDensityBoolean, false);
 
         Window window = new Window(SDL.CreateWindowWithProperties(properties));
         OnWindowCreated?.Invoke(window);
