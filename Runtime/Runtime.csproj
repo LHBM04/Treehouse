@@ -2,8 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>Treehouse.Runtime</AssemblyName>
+    <RootNamespace>Treehouse.Runtime</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <BaseOutputPath>$(SolutionDir)Build\$(Configuration)\Runtime</BaseOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TREEHOUSE_RUNTIME_DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TREEHOUSE_RUNTIME_RELEASE</DefineConstants>
   </PropertyGroup>
 
 </Project>
