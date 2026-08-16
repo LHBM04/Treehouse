@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+
 using static SDL3.SDL;
 
 namespace Treehouse.Runtime.System.Windowing;
@@ -16,14 +18,39 @@ public class WindowSubmodule : EngineSubmodule
     private readonly List<Window> mWindows;
 
     /// <summary>
-    /// 
+    /// 창이 생성될 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window>? OnWindowCreated;
+
+    /// <summary>
+    /// 창이 닫힐 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window>? OnWindowClosed;
+
+    /// <summary>
+    /// 창이 추가될 때 호출되는 이벤트.
     /// </summary>
     public event Action<Window>? OnWindowAdded;
 
     /// <summary>
-    /// 
+    /// 창이 제거될 때 호출되는 이벤트.
     /// </summary>
     public event Action<Window>? OnWindowRemoved;
+
+    /// <summary>
+    /// 창의 위치가 변경되었을 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window, Vector2>? OnWindowMoved;
+
+    /// <summary>
+    /// 창의 크기가 변경되었을 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window, Vector2>? OnWindowResized;
+
+    /// <summary>
+    /// 창의 포커스 상태가 변경되었을 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window, bool>? OnWindowFocusChanged;
 
     public WindowSubmodule()
     {
@@ -55,6 +82,7 @@ public class WindowSubmodule : EngineSubmodule
         SDL_SetBooleanProperty(properties, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, false);
 
         Window window = new Window(SDL_CreateWindowWithProperties(properties));
+        OnWindowCreated?.Invoke(window);
 
         mWindows.Add(window);
         OnWindowAdded?.Invoke(window);
@@ -92,21 +120,54 @@ public class WindowSubmodule : EngineSubmodule
         SDL_Event @event;
         while (SDL_PollEvent(out @event))
         {
+            Window? target = mWindows.FirstOrDefault(window => window.ID == @event.window.windowID);
+            
             switch ((SDL_EventType)@event.type)
             {
-                case SDL_EventType.SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+                case SDL_EventType.SDL_EVENT_WINDOW_MOVED:
                 {
-                    Window? target = mWindows.FirstOrDefault(window => window.ID == @event.window.windowID);
                     if (target != null)
                     {
-                        target.Close();
+                        OnWindowMoved?.Invoke(target, new Vector2(@event.window.data1, @event.window.data2));
+                    }
+
+                    break;
+                }
+                case SDL_EventType.SDL_EVENT_WINDOW_RESIZED:
+                {
+                    if (target != null)
+                    {
+                        OnWindowResized?.Invoke(target, new Vector2(@event.window.data1, @event.window.data2));
+                    }
+
+                    break;
+                }
+                case SDL_EventType.SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+                {
+                    if (target != null)
+                    {
+                        OnWindowClosed?.Invoke(target);
                         DestroyWindow(target);
                     }
 
                     break;
                 }
-                default:
+                case SDL_EventType.SDL_EVENT_WINDOW_FOCUS_GAINED:
                 {
+                    if (target != null)
+                    {
+                        OnWindowFocusChanged?.Invoke(target, true);
+                    }
+
+                    break;
+                }
+                case SDL_EventType.SDL_EVENT_WINDOW_FOCUS_LOST:
+                {
+                    if (target != null)
+                    {
+                        OnWindowFocusChanged?.Invoke(target, false);
+                    }
+
                     break;
                 }
             }
