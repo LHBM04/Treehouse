@@ -1,7 +1,7 @@
 using System;
 using Treehouse.Runtime.Maths;
 using Treehouse.Runtime.Windowing;
-using Veldrid;
+using SDL3;
 
 namespace Treehouse.Runtime.Rendering;
 
@@ -28,17 +28,17 @@ public class Renderer : IDisposable
     /// <summary>
     /// 해당 렌더러가 관리하는 명령 리스트.
     /// </summary>
-    internal CommandList? CommandList { get; private set; }
+    internal nint CommandList { get; private set; }
 
     /// <summary>
     /// 해당 렌더러가 관리하는 스왑 체인.
     /// </summary>
-    internal Swapchain? Swapchain { get; private set; }
+    internal nint Swapchain { get; private set; }
 
     public void Dispose()
     {
-        CommandList?.Dispose();
-        Swapchain?.Dispose();
+        SDL.ReleaseGPUBuffer();
+        SDL.AcquireGPUCommandBuffer()
     }
 
     public void Begin()

@@ -27,7 +27,6 @@
     <PackageReference Include="SDL3-CS.MacOS" Version="3.4.14.1" />
     <PackageReference Include="SDL3-CS.tvOS" Version="3.4.14.1" />
     <PackageReference Include="SDL3-CS.Windows" Version="3.4.14.1" />
-    <PackageReference Include="Veldrid" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
