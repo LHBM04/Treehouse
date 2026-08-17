@@ -9,8 +9,13 @@ namespace Treehouse.Runtime.System.Windowing;
 /// <summary>
 /// 애플리케이션 내 창을 제어하는 서브시스템을 정의합니다.
 /// </summary>
-public class WindowSubsystem : EngineSubsystem
+public class WindowSubsystem : IEngineSubsystem
 {
+    public uint Priority
+    {
+        get { return 0; }
+    }
+
     /// <summary>
     /// 해당 서브시스템이 관리하는 모든 창.
     /// </summary>
@@ -102,10 +107,8 @@ public class WindowSubsystem : EngineSubsystem
         }
     }
 
-    internal override void OnInitialize()
+    public void OnInitialize()
     {
-        base.OnInitialize();
-
         if (!SDL.InitSubSystem(SDL.InitFlags.Video | SDL.InitFlags.Events))
         {
             throw new InvalidOperationException("SDL 서브시스템 초기화에 실패했습니다!");
@@ -118,10 +121,8 @@ public class WindowSubsystem : EngineSubsystem
         SDL.GLSetAttribute(SDL.GLAttr.DepthSize, 24);
     }
 
-    internal override void OnTick()
+    public void OnTick()
     {
-        base.OnTick();
-
         SDL.Event @event;
         while (SDL.PollEvent(out @event))
         {
@@ -158,10 +159,8 @@ public class WindowSubsystem : EngineSubsystem
         }
     }
 
-    internal override void OnRelease()
+    public void OnRelease()
     {
-        base.OnRelease();
-
         foreach (Window window in mWindows)
         {
             window.Dispose();

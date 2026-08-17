@@ -1,13 +1,18 @@
-using SDL3;
 using System;
-using Treehouse.Runtime.System.Windowing;
+using SDL3;
 using Veldrid;
 using Veldrid.OpenGL;
+using Treehouse.Runtime.System.Windowing;
 
 namespace Treehouse.Runtime.System.Rendering;
 
-public class RenderSubsystem : EngineSubsystem
+public class RenderSubsystem : IEngineSubsystem
 {
+    public uint Priority
+    {
+        get { return 10; }
+    }
+
     /// <summary>
     /// 해당 서브시스템이 관리하는 그래픽스 디바이스.
     /// </summary>
@@ -18,15 +23,13 @@ public class RenderSubsystem : EngineSubsystem
     /// </summary>
     private CommandList? mCommandList;
 
-    internal override void OnInitialize()
+    public void OnInitialize()
     {
-        base.OnInitialize();
+
     }
 
-    internal override void OnTick()
+    public void OnTick()
     {
-        base.OnTick();
-
         if (mCommandList == null)
         {
             throw new NullReferenceException("명령 리스트가 null입니다!");
@@ -41,12 +44,10 @@ public class RenderSubsystem : EngineSubsystem
         mDevice.SwapBuffers(mDevice.MainSwapchain);
     }
 
-    internal override void OnRelease()
+    public void OnRelease()
     {
         mCommandList?.Dispose();
         mDevice?.Dispose();
-
-        base.OnRelease();
     }
 
     public void CreateOpenGL(Window window)
