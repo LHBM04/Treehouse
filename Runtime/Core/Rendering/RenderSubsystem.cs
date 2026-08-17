@@ -1,14 +1,11 @@
-using SDL3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Treehouse.Runtime.Maths;
-using Treehouse.Runtime.Core.Windowing;
+using SDL3;
 using Veldrid;
 using Veldrid.OpenGL;
-using Vulkan.Xlib;
-using Window = Treehouse.Runtime.Core.Windowing.Window;
-using Windowing_Window = Treehouse.Runtime.Core.Windowing.Window;
+using Treehouse.Runtime.Maths;
+using Treehouse.Runtime.Core.Windowing;
 
 namespace Treehouse.Runtime.Core.Rendering;
 
@@ -79,7 +76,7 @@ public class RenderSubsystem : IEngineSubsystem
         mDevice?.Dispose();
     }
 
-    public void AddRenderer(Windowing_Window window)
+    public void AddRenderer(Window window)
     {
         GraphicsDeviceOptions graphicsDeviceOptions = new GraphicsDeviceOptions
         {
@@ -119,7 +116,7 @@ public class RenderSubsystem : IEngineSubsystem
         mRenderers.Add(renderer);
     }
 
-    public void DestroyOpenGL(Windowing_Window window)
+    public void DestroyOpenGL(Window window)
     {
         mRenderers.RemoveAll((Renderer renderer) => { return renderer.Window == window; });
     }
