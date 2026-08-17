@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Text.Json;
 using Treehouse.Runtime.Core.Rendering;
 using Treehouse.Runtime.Core.Windowing;
 using Treehouse.Runtime.Maths;
@@ -18,6 +20,11 @@ public static class Entry
     /// <summary>
     /// 
     /// </summary>
+    public static GameSettings GameSettings { get; private set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static Game Game { get; private set; }
 
     /// <summary>
@@ -33,15 +40,16 @@ public static class Entry
 
             Engine.Initialize();
 
-            ProjectOptions projectOptions = new ProjectOptions
-            {
-                ProductName = "Treehouse Game",
-                Resolution = new Vector2D<int>(1280, 720),
-                Flags = ScreenFlags.Windowed
-            };
-
             using (Game = new Game())
             {
+                string gameOptionsText = File.ReadAllText("./GameSettings.json");
+
+                GameSettings = JsonSerializer.Deserialize<GameSettings>(gameOptionsText);
+                if (GameSettings == null)
+                {
+                    throw new NullReferenceException("GameSettings.json이 없습니다!");
+                }
+
                 WindowSubsystem windowSubsystem = Engine.GetSubsystem<WindowSubsystem>();
                 if (windowSubsystem == null)
                 {
@@ -67,9 +75,11 @@ public static class Entry
 
                 WindowOptions windowOptions = new WindowOptions
                 {
-                    Title = projectOptions.ProductName,
-                    Position = new Vector2D<int>(100, 100),
-                    Size = projectOptions.Resolution,
+                    Title = GameSettings.DisplayedTitle,
+                    PositionX = 100,
+                    PositionY = 100,
+                    SizeX = GameSettings.ScreenSizeX,
+                    SizeY = GameSettings.ScreenSizeY,
                     Flags = WindowFlags.None
                 };
 

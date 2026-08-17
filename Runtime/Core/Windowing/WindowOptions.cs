@@ -10,20 +10,30 @@ public record class WindowOptions
     /// <summary>
     /// 생성할 창의 제목.
     /// </summary>
-    public string Title { get; set; } = "Treehouse Window";
+    public required string Title { get; set; }
 
     /// <summary>
-    /// 생성할 창의 위치.
+    /// 생성할 창의 X 위치.
     /// </summary>
-    public Vector2D<int> Position { get; set; } = new Vector2D<int>(100, 100);
+    public required int PositionX { get; set; }
 
     /// <summary>
-    /// 생성할 창의 크기.
+    /// 생성할 창의 Y 위치.
     /// </summary>
-    public Vector2D<int> Size { get; set; } = new Vector2D<int>(800, 600);
+    public required int PositionY { get; set; }
+
+    /// <summary>
+    /// 생성할 창의 가로 크기.
+    /// </summary>
+    public required int SizeX { get; set; }
+
+    /// <summary>
+    /// 생성할 창의 세로 크기.
+    /// </summary>
+    public required int SizeY { get; set; }
 
     /// <summary>
     /// 생성할 창의 플래그.
     /// </summary>
-    public WindowFlags Flags { get; set; } = WindowFlags.Resizable;
+    public required WindowFlags Flags { get; set; }
 }

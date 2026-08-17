@@ -27,7 +27,7 @@ public enum ScreenFlags : byte
 /// <summary>
 /// 프로젝트의 옵션을 정의합니다.
 /// </summary>
-public record class ProjectOptions
+public record class ProjectSettings
 {
     /// <summary>
     /// 게임의 제목.

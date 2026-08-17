@@ -75,10 +75,10 @@ public class Window : IDisposable
 
         SDL.SetStringProperty(properties, SDL.Props.WindowCreateTitleString, options.Title);
 
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateXNumber, options.Position.X);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateYNumber, options.Position.Y);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateWidthNumber, options.Size.X);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateHeightNumber, options.Size.Y);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateXNumber, options.PositionX);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateYNumber, options.PositionY);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateWidthNumber, options.SizeX);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateHeightNumber, options.SizeY);
 
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateFullscreenBoolean, options.Flags.HasFlag(WindowFlags.Fullscreen));
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateResizableBoolean, options.Flags.HasFlag(WindowFlags.Resizable));
