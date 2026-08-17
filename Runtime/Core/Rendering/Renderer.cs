@@ -55,7 +55,7 @@ public class Renderer : IDisposable
 
         CommandList.Begin();
         CommandList.SetFramebuffer(Swapchain.Framebuffer);
-        CommandList.ClearColorTarget(0, new RgbaFloat(0, 0, 0, 1));
+        CommandList.ClearColorTarget(0, new RgbaFloat(ClearColor.R, ClearColor.G, ClearColor.B, ClearColor.A));
     }
 
     public void End()
@@ -76,6 +76,9 @@ public class Renderer : IDisposable
         renderer.ShouldVSync = options.ShouldVSync;
         renderer.CommandList = device.ResourceFactory.CreateCommandList();
         renderer.Swapchain = device.MainSwapchain;
+
+        renderer.Swapchain.Resize((uint)options.Size.X, (uint)options.Size.Y);
+
         return renderer;
     }
 
