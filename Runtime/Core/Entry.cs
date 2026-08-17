@@ -33,9 +33,9 @@ public static class Entry
 
             Engine.Initialize();
 
-            GameOptions gameOptions = new GameOptions
+            ProjectOptions projectOptions = new ProjectOptions
             {
-                Title = "Treehouse Game",
+                ProductName = "Treehouse Game",
                 Resolution = new Vector2D<int>(1280, 720),
                 Flags = ScreenFlags.Windowed
             };
@@ -67,9 +67,9 @@ public static class Entry
 
                 WindowOptions windowOptions = new WindowOptions
                 {
-                    Title = gameOptions.Title,
+                    Title = projectOptions.ProductName,
                     Position = new Vector2D<int>(100, 100),
-                    Size = gameOptions.Resolution,
+                    Size = projectOptions.Resolution,
                     Flags = WindowFlags.None
                 };
 

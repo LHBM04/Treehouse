@@ -25,22 +25,22 @@ public enum ScreenFlags : byte
 }
 
 /// <summary>
-/// 게임의 옵션을 정의합니다.
+/// 프로젝트의 옵션을 정의합니다.
 /// </summary>
-public record class GameOptions
+public record class ProjectOptions
 {
     /// <summary>
     /// 게임의 제목.
     /// </summary>
-    public required string Title { get; set; }
+    public required string ProductName { get; set; }
 
     /// <summary>
-    /// 게임의 해상도.
+    /// 
     /// </summary>
-    public required Vector2D<int> Resolution { get; set; }
+    public required string CompanyName { get; set; }
 
     /// <summary>
-    /// 해당 게임의 화면 플래그.
+    /// 
     /// </summary>
-    public required ScreenFlags Flags { get; set; }
+    public required string Version { get; set; }
 }
