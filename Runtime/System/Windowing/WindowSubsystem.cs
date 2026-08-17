@@ -54,14 +54,19 @@ public class WindowSubsystem : EngineSubsystem
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateAlwaysOnTopBoolean, options.Flags.HasFlag(WindowFlags.AlwaysOnTop));
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateMaximizedBoolean, options.Flags.HasFlag(WindowFlags.Maximized));
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateMaximizedBoolean, options.Flags.HasFlag(WindowFlags.Minimized));
+        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateOpenGLBoolean, true); // TODO: 이거 테스트용이니까, 반드시 나중에 설정으로 분리할 것.
 
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHighPixelDensityBoolean, false);
 
         Window window = new Window(SDL.CreateWindowWithProperties(properties));
         window?.OnCreated?.Invoke();
 
+        SDL.DestroyProperties(properties);
+
         mWindows.Add(window);
         OnWindowAdded?.Invoke(window);
+
+        SDL.GLMakeCurrent(window.Handle, SDL.GLCreateContext(window.Handle));
 
         return window;
     }
@@ -87,6 +92,12 @@ public class WindowSubsystem : EngineSubsystem
         {
             throw new InvalidOperationException("SDL 서브시스템 초기화에 실패했습니다!");
         }
+
+        // 테스트용 GL 설정
+        SDL.GLSetAttribute(SDL.GLAttr.ContextMajorVersion, 4);
+        SDL.GLSetAttribute(SDL.GLAttr.ContextMinorVersion, 3);
+        SDL.GLSetAttribute(SDL.GLAttr.ContextProfileMask, (int)SDL.GLProfile.Core);
+        SDL.GLSetAttribute(SDL.GLAttr.DepthSize, 24);
     }
 
     internal override void OnTick()
