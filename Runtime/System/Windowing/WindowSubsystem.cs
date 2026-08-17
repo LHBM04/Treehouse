@@ -17,14 +17,29 @@ public class WindowSubsystem : EngineSubsystem
     private readonly List<Window> mWindows;
 
     /// <summary>
-    /// 창이 추가될 때 호출되는 이벤트.
+    /// 창이 생성될 때 호출되는 이벤트.
     /// </summary>
-    public Action<Window>? OnWindowAdded;
+    public event Action<Window>? OnWindowCreated;
 
     /// <summary>
-    /// 창이 제거될 때 호출되는 이벤트.
+    /// 창이 닫힐 때 호출되는 이벤트.
     /// </summary>
-    public Action<Window>? OnWindowRemoved;
+    public event Action<Window>? OnWindowClosed;
+
+    /// <summary>
+    /// 창의 위치가 변경되었을 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window, Vector2>? OnWindowMoved;
+
+    /// <summary>
+    /// 창의 크기가 변경되었을 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window, Vector2>? OnWindowResized;
+
+    /// <summary>
+    /// 창이 포커싱되었을 때 호출되는 이벤트.
+    /// </summary>
+    public event Action<Window, bool>? OnWindowFocusChanged;
 
     public WindowSubsystem()
     {
@@ -58,15 +73,18 @@ public class WindowSubsystem : EngineSubsystem
 
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHighPixelDensityBoolean, false);
 
-        Window window = new Window(SDL.CreateWindowWithProperties(properties));
-        window?.OnCreated?.Invoke();
+        nint handle = SDL.CreateWindowWithProperties(properties);
+        if (handle == nint.Zero)
+        {
+            throw new Exception($"SDL 창 생성에 실패했습니다! {SDL.GetError()}");
+        }
 
         SDL.DestroyProperties(properties);
+        SDL.GLMakeCurrent(handle, SDL.GLCreateContext(handle));
 
+        Window window = new Window(handle);
+        OnWindowCreated?.Invoke(window);
         mWindows.Add(window);
-        OnWindowAdded?.Invoke(window);
-
-        SDL.GLMakeCurrent(window.Handle, SDL.GLCreateContext(window.Handle));
 
         return window;
     }
@@ -79,7 +97,7 @@ public class WindowSubsystem : EngineSubsystem
     {
         if (mWindows.Remove(window))
         {
-            OnWindowRemoved?.Invoke(window);
+            OnWindowClosed?.Invoke(window);
             window.Dispose();
         }
     }
@@ -108,33 +126,36 @@ public class WindowSubsystem : EngineSubsystem
         while (SDL.PollEvent(out @event))
         {
             Window? target = mWindows.FirstOrDefault(window => window.ID == @event.Window.WindowID);
+            if (target == null)
+            {
+                throw new Exception("???");
+            }
             
             switch ((SDL.EventType)@event.Type)
             {
                 case SDL.EventType.WindowMoved:
                 {
-                    target?.OnMoved?.Invoke(new Vector2(@event.Window.Data1, @event.Window.Data2));
+                    OnWindowMoved?.Invoke(target, new Vector2(@event.Window.Data1, @event.Window.Data2));
                     break;
                 }
                 case SDL.EventType.WindowResized:
                 {
-                    target?.OnResized?.Invoke(new Vector2(@event.Window.Data1, @event.Window.Data2));
+                    OnWindowResized?.Invoke(target, new Vector2(@event.Window.Data1, @event.Window.Data2));
                     break;
                 }
                 case SDL.EventType.WindowCloseRequested:
                 {
-                    target?.OnClosed?.Invoke();
                     DestroyWindow(target);
                     break;
                 }
                 case SDL.EventType.WindowFocusGained:
                 {
-                    target?.OnFocusGained?.Invoke();
+                    OnWindowFocusChanged?.Invoke(target, true);
                     break;
                 }
                 case SDL.EventType.WindowFocusLost:
                 {
-                    target?.OnFocusLost?.Invoke();
+                    OnWindowFocusChanged?.Invoke(target, false);
                     break;
                 }
             }
