@@ -1,5 +1,5 @@
 using System;
-using System.Numerics;
+using Treehouse.Runtime.Maths;
 using Treehouse.Runtime.System;
 using Treehouse.Runtime.System.Rendering;
 using Treehouse.Runtime.System.Windowing;
@@ -51,8 +51,8 @@ public class Program
             WindowOptions windowOptions = new WindowOptions
             {
                 Title = "Treehouse Example #1",
-                Position = new Vector2(100, 100),
-                Size = new Vector2(1280, 720),
+                Position = new Vector2D<int>(100, 100),
+                Size = new Vector2D<int>(1280, 720),
                 Flags = WindowFlags.None
             };
 

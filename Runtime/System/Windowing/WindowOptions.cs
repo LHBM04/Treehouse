@@ -1,4 +1,4 @@
-using System.Numerics;
+using Treehouse.Runtime.Maths;
 
 namespace Treehouse.Runtime.System.Windowing;
 
@@ -15,12 +15,12 @@ public record class WindowOptions
     /// <summary>
     /// 생성할 창의 위치.
     /// </summary>
-    public Vector2 Position { get; set; } = new Vector2(100, 100);
+    public Vector2D<int> Position { get; set; } = new Vector2D<int>(100, 100);
 
     /// <summary>
     /// 생성할 창의 크기.
     /// </summary>
-    public Vector2 Size { get; set; } = new Vector2(800, 600);
+    public Vector2D<int> Size { get; set; } = new Vector2D<int>(800, 600);
 
     /// <summary>
     /// 생성할 창의 플래그.
