@@ -1,7 +1,7 @@
+using Treehouse.Runtime.Core.Windowing;
 using Treehouse.Runtime.Maths;
-using Treehouse.Runtime.System.Windowing;
 
-namespace Treehouse.Runtime.System.Rendering;
+namespace Treehouse.Runtime.Core.Rendering;
 
 /// <summary>
 /// 생성할 렌더러의 설정을 정의합니다.

@@ -1,12 +1,12 @@
 using System;
 using Treehouse.Runtime.Maths;
-using Treehouse.Runtime.System;
-using Treehouse.Runtime.System.Rendering;
-using Treehouse.Runtime.System.Windowing;
+using Treehouse.Runtime.Core;
+using Treehouse.Runtime.Core.Rendering;
+using Treehouse.Runtime.Core.Windowing;
 
 namespace Treehouse.Example;
 
-public class Program
+public static class Core
 {
     /// <summary>
     /// 해당 프로그램의 메인 창.
@@ -36,12 +36,14 @@ public class Program
             {
                 throw new Exception("Window Subsystem이 시스템에 등록되지 않았습니다!");
             }
+            windowSubsystem.OnInitialize();
 
             RenderSubsystem? renderSubsystem = engine.GetSubsystem<RenderSubsystem>();
             if (renderSubsystem == null)
             {
                 throw new Exception("Render Subsystem이 시스템에 등록되지 않았습니다!");
             }
+            renderSubsystem.OnInitialize();
 
             windowSubsystem.OnWindowAdded += (Window window) =>
             {

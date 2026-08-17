@@ -1,6 +1,6 @@
 using Treehouse.Runtime.Maths;
 
-namespace Treehouse.Runtime.System.Windowing;
+namespace Treehouse.Runtime.Core.Windowing;
 
 /// <summary>
 /// 애플리케이션 내 창이 가지는 설정을 정의합니다.
