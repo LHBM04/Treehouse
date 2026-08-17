@@ -126,11 +126,7 @@ public class WindowSubsystem : EngineSubsystem
         while (SDL.PollEvent(out @event))
         {
             Window? target = mWindows.FirstOrDefault(window => window.ID == @event.Window.WindowID);
-            if (target == null)
-            {
-                throw new Exception("???");
-            }
-            
+
             switch ((SDL.EventType)@event.Type)
             {
                 case SDL.EventType.WindowMoved:

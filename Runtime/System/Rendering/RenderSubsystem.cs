@@ -34,7 +34,7 @@ public class RenderSubsystem : EngineSubsystem
 
         mCommandList.Begin();
         mCommandList.SetFramebuffer(mDevice.MainSwapchain.Framebuffer);
-        mCommandList.ClearColorTarget(0, new RgbaFloat(1, 1, 1, 1));
+        mCommandList.ClearColorTarget(0, new RgbaFloat(0, 0, 0, 1));
         mCommandList.End();
 
         mDevice.SubmitCommands(mCommandList);
@@ -43,8 +43,8 @@ public class RenderSubsystem : EngineSubsystem
 
     internal override void OnRelease()
     {
-        mCommandList.Dispose();
-        mDevice.Dispose();
+        mCommandList?.Dispose();
+        mDevice?.Dispose();
 
         base.OnRelease();
     }
@@ -77,5 +77,10 @@ public class RenderSubsystem : EngineSubsystem
         );
 
         mCommandList = mDevice.ResourceFactory.CreateCommandList();
+    }
+
+    public void DestroyOpenGL(Window window)
+    {
+        mCommandList?.Dispose();
     }
 }
