@@ -3,7 +3,6 @@ using System.IO;
 using System.Text.Json;
 using Treehouse.Runtime.Core.Rendering;
 using Treehouse.Runtime.Core.Windowing;
-using Treehouse.Runtime.Maths;
 
 namespace Treehouse.Runtime.Core;
 
@@ -44,19 +43,19 @@ public static class Entry
             {
                 string gameOptionsText = File.ReadAllText("./Config/GameSettings.json");
 
-                GameSettings = JsonSerializer.Deserialize<GameSettings>(gameOptionsText);
+                GameSettings = JsonSerializer.Deserialize<GameSettings>(gameOptionsText)!;
                 if (GameSettings == null)
                 {
                     throw new NullReferenceException("GameSettings.json이 없습니다!");
                 }
 
-                WindowSubsystem windowSubsystem = Engine.GetSubsystem<WindowSubsystem>();
+                WindowSubsystem? windowSubsystem = Engine.GetSubsystem<WindowSubsystem>();
                 if (windowSubsystem == null)
                 {
                     throw new NullReferenceException("창 서브시스템이 null입니다!");
                 }
 
-                RenderSubsystem renderSubsystem = Engine.GetSubsystem<RenderSubsystem>();
+                RenderSubsystem? renderSubsystem = Engine.GetSubsystem<RenderSubsystem>();
                 if (renderSubsystem == null)
                 {
                     throw new NullReferenceException("렌더 서브시스템이 null입니다!");
