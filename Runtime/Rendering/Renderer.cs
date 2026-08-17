@@ -1,9 +1,9 @@
 using System;
-using Treehouse.Runtime.Core.Windowing;
 using Treehouse.Runtime.Maths;
+using Treehouse.Runtime.Windowing;
 using Veldrid;
 
-namespace Treehouse.Runtime.Core.Rendering;
+namespace Treehouse.Runtime.Rendering;
 
 /// <summary>
 /// 애플리케이션 내 렌더러를 정의합니다.

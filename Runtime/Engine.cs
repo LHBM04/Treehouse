@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 /// <summary>
 /// 애플리케이션 내 엔진을 구현합니다.
@@ -9,7 +9,7 @@ public class Engine : System<IEngineSubsystem>
 {
     public void Initialize()
     {
-        Subsystems.OrderBy((IEngineSubsystem subsystem) => { return subsystem.Priority; });
+        Subsystems.OrderBy((subsystem) => { return subsystem.Priority; });
 
         foreach (IEngineSubsystem subsystem in Subsystems)
         {
@@ -27,7 +27,7 @@ public class Engine : System<IEngineSubsystem>
 
     public void Release()
     {
-        Subsystems.OrderByDescending((IEngineSubsystem subsystem) => { return subsystem.Priority; });
+        Subsystems.OrderByDescending((subsystem) => { return subsystem.Priority; });
 
         foreach (IEngineSubsystem subsystem in Subsystems)
         {

@@ -1,9 +1,6 @@
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
-/// <summary>
-/// 애플리케이션 내 엔진 시스템이 관리하는 서브시스템을 정의합니다.
-/// </summary>
-public interface IEngineSubsystem : ISubsystem
+public interface IGameSubsystem : ISubsystem
 {
     /// <summary>
     /// 해당 서브시스템이 초기화될 때 호출됩니다.

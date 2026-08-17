@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 /// <summary>
 /// 애플리케이션 내 시스템을 정의합니다.
@@ -51,7 +51,7 @@ public abstract class System<TSubsystem> : IDisposable
     /// <returns>지정한 타입을 가진 서브시스템. 없으면 null.</returns>
     public TSubsystem? GetSubsystem(Type subsystemType)
     {
-        return Subsystems.FirstOrDefault((TSubsystem subsystem) => { return subsystem.GetType() == subsystemType;});
+        return Subsystems.FirstOrDefault((subsystem) => { return subsystem.GetType() == subsystemType;});
     }
 
     /// <summary>

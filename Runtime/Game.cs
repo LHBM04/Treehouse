@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 public class Game : System<IGameSubsystem>
 {
@@ -11,7 +11,7 @@ public class Game : System<IGameSubsystem>
 
     public void Initialize()
     {
-        Subsystems.OrderBy((IGameSubsystem subsystem) => { return subsystem.Priority; });
+        Subsystems.OrderBy((subsystem) => { return subsystem.Priority; });
 
         foreach (IGameSubsystem subsystem in Subsystems)
         {
@@ -29,7 +29,7 @@ public class Game : System<IGameSubsystem>
 
     public void Release()
     {
-        Subsystems.OrderByDescending((IGameSubsystem subsystem) => { return subsystem.Priority; });
+        Subsystems.OrderByDescending((subsystem) => { return subsystem.Priority; });
 
         foreach (IGameSubsystem subsystem in Subsystems)
         {

@@ -1,7 +1,7 @@
 using System;
 using Treehouse.Runtime.Maths;
 
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 /// <summary>
 /// 게임 화면이 가지는 플래그를 정의합니다.

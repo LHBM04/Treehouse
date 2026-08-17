@@ -1,4 +1,4 @@
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 /// <summary>
 /// 애플리케이션 내 서브시스템을 정의합니다.

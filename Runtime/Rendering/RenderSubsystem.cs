@@ -5,9 +5,9 @@ using SDL3;
 using Veldrid;
 using Veldrid.OpenGL;
 using Treehouse.Runtime.Maths;
-using Treehouse.Runtime.Core.Windowing;
+using Treehouse.Runtime.Windowing;
 
-namespace Treehouse.Runtime.Core.Rendering;
+namespace Treehouse.Runtime.Rendering;
 
 public class RenderSubsystem : IEngineSubsystem
 {
@@ -118,6 +118,6 @@ public class RenderSubsystem : IEngineSubsystem
 
     public void DestroyOpenGL(Window window)
     {
-        mRenderers.RemoveAll((Renderer renderer) => { return renderer.Window == window; });
+        mRenderers.RemoveAll((renderer) => { return renderer.Window == window; });
     }
 }

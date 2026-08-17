@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using SDL3;
 
-namespace Treehouse.Runtime.Core.Windowing;
+namespace Treehouse.Runtime.Windowing;
 
 /// <summary>
 /// 애플리케이션 내 창을 제어하는 서브시스템을 정의합니다.

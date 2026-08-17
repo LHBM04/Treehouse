@@ -3,7 +3,7 @@ using System;
 using System.Numerics;
 using Vulkan.Xlib;
 
-namespace Treehouse.Runtime.Core.Windowing;
+namespace Treehouse.Runtime.Windowing;
 
 public class Window : IDisposable
 {

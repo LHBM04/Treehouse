@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using System.Text.Json;
-using Treehouse.Runtime.Core.Rendering;
-using Treehouse.Runtime.Core.Windowing;
+using Treehouse.Runtime.Rendering;
+using Treehouse.Runtime.Windowing;
 
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 /// <summary>
 /// 
@@ -61,12 +61,12 @@ public static class Entry
                     throw new NullReferenceException("렌더 서브시스템이 null입니다!");
                 }
 
-                windowSubsystem.OnWindowAdded += (Window window) =>
+                windowSubsystem.OnWindowAdded += (window) =>
                 {
                     Game.IsRunning = true;
                     renderSubsystem.AddRenderer(window);
                 };
-                windowSubsystem.OnWindowRemoved += (Window window) =>
+                windowSubsystem.OnWindowRemoved += (window) =>
                 {
                     renderSubsystem.DestroyOpenGL(window);
                     Game.IsRunning = false;

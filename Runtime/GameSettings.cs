@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Treehouse.Runtime.Maths;
 
-namespace Treehouse.Runtime.Core;
+namespace Treehouse.Runtime;
 
 /// <summary>
 /// 게임 내 설정을 정의합니다.
