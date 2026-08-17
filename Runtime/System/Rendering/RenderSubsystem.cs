@@ -30,6 +30,11 @@ public class RenderSubsystem : IEngineSubsystem
 
     public void OnTick()
     {
+        if (mDevice == null)
+        {
+            throw new NullReferenceException("디바이스가 null입니다!");
+        }
+
         if (mCommandList == null)
         {
             throw new NullReferenceException("명령 리스트가 null입니다!");
