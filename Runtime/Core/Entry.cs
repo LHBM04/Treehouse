@@ -42,7 +42,7 @@ public static class Entry
 
             using (Game = new Game())
             {
-                string gameOptionsText = File.ReadAllText("./GameSettings.json");
+                string gameOptionsText = File.ReadAllText("./Config/GameSettings.json");
 
                 GameSettings = JsonSerializer.Deserialize<GameSettings>(gameOptionsText);
                 if (GameSettings == null)
