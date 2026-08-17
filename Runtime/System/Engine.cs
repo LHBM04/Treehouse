@@ -7,7 +7,7 @@ namespace Treehouse.Runtime.System;
 /// <summary>
 /// 애플리케이션 내 엔진을 구현합니다.
 /// </summary>
-public class Engine : IDisposable
+public class Engine : System
 {
     /// <summary>
     /// 해당 엔진 내의 모든 서브시스템.
