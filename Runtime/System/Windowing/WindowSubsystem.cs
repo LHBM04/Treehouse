@@ -24,12 +24,12 @@ public class WindowSubsystem : IEngineSubsystem
     /// <summary>
     /// 창이 생성될 때 호출되는 이벤트.
     /// </summary>
-    public event Action<Window>? OnWindowCreated;
+    public event Action<Window>? OnWindowAdded;
 
     /// <summary>
     /// 창이 닫힐 때 호출되는 이벤트.
     /// </summary>
-    public event Action<Window>? OnWindowClosed;
+    public event Action<Window>? OnWindowRemoved;
 
     /// <summary>
     /// 창의 위치가 변경되었을 때 호출되는 이벤트.
@@ -59,18 +59,19 @@ public class WindowSubsystem : IEngineSubsystem
     public void AddWindow(Window window)
     {
         mWindows.Add(window);
-        OnWindowCreated?.Invoke(window);
+        OnWindowAdded?.Invoke(window);
     }
 
     /// <summary>
-    /// 지정한 창을 파괴합니다.
+    /// 지정한 창을 제거합니다.
     /// </summary>
     /// <param name="window"></param>
-    public void DestroyWindow(Window window)
+    public void RemoveWindow(Window window)
     {
         if (mWindows.Remove(window))
         {
-            OnWindowClosed?.Invoke(window);
+            OnWindowRemoved?.Invoke(window);
+            window.Dispose();
         }
     }
 
@@ -109,7 +110,7 @@ public class WindowSubsystem : IEngineSubsystem
                 }
                 case SDL.EventType.WindowCloseRequested:
                 {
-                    DestroyWindow(target);
+                    RemoveWindow(target);
                     break;
                 }
                 case SDL.EventType.WindowFocusGained:

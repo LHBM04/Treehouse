@@ -1,8 +1,13 @@
-using System;
 using SDL3;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Treehouse.Runtime.Maths;
+using Treehouse.Runtime.System.Windowing;
 using Veldrid;
 using Veldrid.OpenGL;
-using Treehouse.Runtime.System.Windowing;
+using Vulkan.Xlib;
+using Window = Treehouse.Runtime.System.Windowing.Window;
 
 namespace Treehouse.Runtime.System.Rendering;
 
@@ -19,13 +24,18 @@ public class RenderSubsystem : IEngineSubsystem
     private GraphicsDevice? mDevice;
 
     /// <summary>
-    /// 해당 서브시스템이 관리하는 명령 리스트.
+    /// 해당 서브시스템이 관리하는 모든 렌더러.
     /// </summary>
-    private CommandList? mCommandList;
+    private readonly List<Renderer> mRenderers;
+
+    public RenderSubsystem()
+    {
+        mRenderers = new List<Renderer>();
+    }
 
     public void OnInitialize()
     {
-
+        // GL의 경우 해줄 게 없다.
     }
 
     public void OnTick()
@@ -35,27 +45,40 @@ public class RenderSubsystem : IEngineSubsystem
             throw new NullReferenceException("디바이스가 null입니다!");
         }
 
-        if (mCommandList == null)
+        if (!mRenderers.Any())
         {
-            throw new NullReferenceException("명령 리스트가 null입니다!");
+            return;
         }
 
-        mCommandList.Begin();
-        mCommandList.SetFramebuffer(mDevice.MainSwapchain.Framebuffer);
-        mCommandList.ClearColorTarget(0, new RgbaFloat(0, 0, 0, 1));
-        mCommandList.End();
+        foreach (Renderer renderer in mRenderers)
+        {
+            renderer.Begin();
 
-        mDevice.SubmitCommands(mCommandList);
-        mDevice.SwapBuffers(mDevice.MainSwapchain);
+            // 렌더링 로직...
+
+            renderer.End();
+
+            mDevice.SubmitCommands(renderer.CommandList);
+            mDevice.SwapBuffers(renderer.Swapchain);
+        }
     }
 
     public void OnRelease()
     {
-        mCommandList?.Dispose();
+        if (mRenderers.Any())
+        {
+            foreach (Renderer renderer in mRenderers)
+            {
+                renderer.Dispose();
+            }
+
+            mRenderers.Clear();
+        }
+
         mDevice?.Dispose();
     }
 
-    public void CreateOpenGL(Window window)
+    public void AddRenderer(Window window)
     {
         GraphicsDeviceOptions graphicsDeviceOptions = new GraphicsDeviceOptions
         {
@@ -82,11 +105,21 @@ public class RenderSubsystem : IEngineSubsystem
             (uint)window.Size.Y
         );
 
-        mCommandList = mDevice.ResourceFactory.CreateCommandList();
+        RendererOptions rendererOptions = new RendererOptions
+        {
+            Window = window,
+            ClearColor = new ColorRGBA<float>(1.0f, 1.0f, 1.0f, 1.0f),
+            Position = new Vector2D<float>(0.0f, 0.0f),
+            Size = new Vector2D<float>(window.Size.X, window.Size.Y),
+            ShouldVSync = false,
+        };
+
+        Renderer renderer = Renderer.Create(mDevice, rendererOptions);
+        mRenderers.Add(renderer);
     }
 
     public void DestroyOpenGL(Window window)
     {
-        mCommandList?.Dispose();
+        mRenderers.RemoveAll((Renderer renderer) => { return renderer.Window == window; });
     }
 }

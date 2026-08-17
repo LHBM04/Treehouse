@@ -112,6 +112,16 @@ public class Window : IDisposable
     /// <param name="window"></param>
     public static void Destroy(Window window)
     {
-        window?.Dispose();
+        SDL.Event @event = new SDL.Event
+        {
+            Type = (uint)SDL.EventType.WindowCloseRequested,
+            Window = new SDL.WindowEvent
+            {
+                WindowID = window.ID,
+                Timestamp = SDL.GetTicksNS()
+            }
+        };
+
+        SDL.PushEvent(ref @event);
     }
 }

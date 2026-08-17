@@ -9,9 +9,14 @@ namespace Treehouse.Example;
 public class Program
 {
     /// <summary>
-    /// 해당 프로그램의 주 창.
+    /// 해당 프로그램의 메인 창.
     /// </summary>
     private static Window? mMainWindow = null;
+
+    /// <summary>
+    /// 해당 프로그램의 서브 창.
+    /// </summary>
+    private static Window? mSubWindow = null;
 
     /// <summary>
     /// 프로그램 가동 중인가 여부.
@@ -38,14 +43,22 @@ public class Program
                 throw new Exception("Render Subsystem이 시스템에 등록되지 않았습니다!");
             }
 
-            windowSubsystem.OnWindowCreated += (Window window) =>
+            windowSubsystem.OnWindowAdded += (Window window) =>
             {
-                renderSubsystem.CreateOpenGL(window);
+                renderSubsystem.AddRenderer(window);
             };
-            windowSubsystem.OnWindowClosed += (Window window) =>
+            windowSubsystem.OnWindowRemoved += (Window window) =>
             {
                 renderSubsystem.DestroyOpenGL(window);
-                mIsRunning = false;
+
+                if (window == mMainWindow)
+                {
+                    mIsRunning = false;
+                }
+                else if (window == mSubWindow)
+                {
+                    Console.WriteLine("서브 창 파괴!");
+                }
             };
 
             WindowOptions windowOptions = new WindowOptions
@@ -58,6 +71,9 @@ public class Program
 
             mMainWindow = Window.Create(windowOptions);
             windowSubsystem.AddWindow(mMainWindow);
+
+            mSubWindow = Window.Create(windowOptions);
+            windowSubsystem.AddWindow(mSubWindow);
 
             mIsRunning = true;
             while (mIsRunning)
