@@ -12,11 +12,12 @@ public abstract class System<TSubsystem> : IDisposable
     /// <summary>
     /// 해당 시스템이 관리하는 모든 서브시스템.
     /// </summary>
-    private List<TSubsystem> mSubsystems = new List<TSubsystem>();
+    public List<TSubsystem> Subsystems { get; private set; }
+        = new List<TSubsystem>();
 
     public void Dispose()
     {
-        mSubsystems.Clear();
+        Subsystems.Clear();
     }
 
     /// <summary>
@@ -31,7 +32,7 @@ public abstract class System<TSubsystem> : IDisposable
             throw new ArgumentException("올바른 서브시스템 타입이 아닙니다!");
         }
 
-        mSubsystems.Add(newSubmodule);
+        Subsystems.Add(newSubmodule);
     }
 
     /// <summary>
@@ -50,7 +51,7 @@ public abstract class System<TSubsystem> : IDisposable
     /// <returns>지정한 타입을 가진 서브시스템. 없으면 null.</returns>
     public TSubsystem? GetSubsystem(Type subsystemType)
     {
-        return mSubsystems.FirstOrDefault((TSubsystem subsystem) => { return subsystem.GetType() == subsystemType;});
+        return Subsystems.FirstOrDefault((TSubsystem subsystem) => { return subsystem.GetType() == subsystemType;});
     }
 
     /// <summary>

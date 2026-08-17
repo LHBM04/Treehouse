@@ -1,5 +1,4 @@
-using Treehouse.Runtime.Core.Rendering;
-using Treehouse.Runtime.Core.Windowing;
+using System.Linq;
 
 namespace Treehouse.Runtime.Core;
 
@@ -8,9 +7,33 @@ namespace Treehouse.Runtime.Core;
 /// </summary>
 public class Engine : System<IEngineSubsystem>
 {
+    public void Initialize()
+    {
+        Subsystems.OrderBy((IEngineSubsystem subsystem) => { return subsystem.Priority; });
+
+        foreach (IEngineSubsystem subsystem in Subsystems)
+        {
+            subsystem.OnInitialize();
+        }
+    }
+
     public void Tick()
     {
-        GetSubsystem<WindowSubsystem>()?.OnTick();
-        GetSubsystem<RenderSubsystem>()?.OnTick();
+        foreach (IEngineSubsystem subsystem in Subsystems)
+        {
+            subsystem.OnTick();
+        }
+    }
+
+    public void Release()
+    {
+        Subsystems.OrderByDescending((IEngineSubsystem subsystem) => { return subsystem.Priority; });
+
+        foreach (IEngineSubsystem subsystem in Subsystems)
+        {
+            subsystem.OnRelease();
+        }
+
+        Subsystems.Clear();
     }
 }
