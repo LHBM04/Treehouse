@@ -3,7 +3,7 @@ namespace Treehouse.Runtime.System;
 /// <summary>
 /// 
 /// </summary>
-public class EngineSubmodule
+public class EngineSubsystem
 {
     /// <summary>
     /// 해당 서브모듈이 초기화될 때 호출됩니다.

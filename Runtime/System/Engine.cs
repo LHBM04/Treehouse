@@ -10,25 +10,25 @@ namespace Treehouse.Runtime.System;
 public class Engine : IDisposable
 {
     /// <summary>
-    /// 해당 엔진 내의 모든 서브모듈.
+    /// 해당 엔진 내의 모든 서브시스템.
     /// </summary>
-    private readonly List<EngineSubmodule> mSubmodules;
+    private readonly List<EngineSubsystem> mSubsystems;
 
     public Engine()
     {
-        mSubmodules = new List<EngineSubmodule>();
+        mSubsystems = new List<EngineSubsystem>();
     }
 
     public void Dispose()
     {
-        if (mSubmodules.Any())
+        if (mSubsystems.Any())
         {
-            foreach (var submodule in mSubmodules)
+            foreach (var subsystem in mSubsystems)
             {
-                submodule.OnRelease();
+                subsystem.OnRelease();
             }
 
-            mSubmodules.Clear();
+            mSubsystems.Clear();
         }
     }
 
@@ -37,57 +37,57 @@ public class Engine : IDisposable
     /// </summary>
     public void Tick()
     {
-        if (mSubmodules.Any())
+        if (mSubsystems.Any())
         {
-            foreach (var submodule in mSubmodules)
+            foreach (var subsystem in mSubsystems)
             {
-                submodule.OnTick();
+                subsystem.OnTick();
             }
         }
     }
 
     /// <summary>
-    /// 지정한 타입의 서브모듈을 엔진에 추가합니다.
+    /// 지정한 타입의 서브시스템을 엔진에 추가합니다.
     /// </summary>
     /// <param name="submoduleType">지정할 타입.</param>
-    public void AddSubmodule(Type submoduleType)
+    public void AddSubsystem(Type submoduleType)
     {
-        EngineSubmodule? newSubmodule = Activator.CreateInstance(submoduleType) as EngineSubmodule;
+        EngineSubsystem? newSubmodule = Activator.CreateInstance(submoduleType) as EngineSubsystem;
         if (newSubmodule == null)
         {
-            throw new ArgumentException("올바른 Submodule 타입이 아닙니다.");
+            throw new ArgumentException("올바른 서브시스템 타입이 아닙니다!");
         }
 
         newSubmodule!.OnInitialize();
-        mSubmodules.Add(newSubmodule!);
+        mSubsystems.Add(newSubmodule!);
     }
 
     /// <summary>
-    /// 지정한 타입의 서브모듈을 엔진에 추가합니다.
+    /// 지정한 타입의 서브시스템을 엔진에 추가합니다.
     /// </summary>
     /// <typeparam name="TSubmodule">지정할 타입.</typeparam>
-    public void AddSubmodule<TSubmodule>() where TSubmodule : EngineSubmodule
+    public void AddSubsystem<TSubmodule>() where TSubmodule : EngineSubsystem
     {
-        AddSubmodule(typeof(TSubmodule));
+        AddSubsystem(typeof(TSubmodule));
     }
 
     /// <summary>
-    /// 해당 엔진에 지정한 타입을 가진 서브모듈을 반환합니다.
+    /// 해당 엔진에 지정한 타입을 가진 서브시스템을 반환합니다.
     /// </summary>
-    /// <param name="submoduleType">지정할 타입.</param>
-    /// <returns>지정한 타입을 가진 서브모듈. 없으면 null.</returns>
-    public EngineSubmodule? GetSubmodule(Type submoduleType)
+    /// <param name="subsystemType">지정할 타입.</param>
+    /// <returns>지정한 타입을 가진 서브시스템. 없으면 null.</returns>
+    public EngineSubsystem? GetSubsystem(Type subsystemType)
     {
-        return mSubmodules.FirstOrDefault(submodule => submodule.GetType() == submoduleType);
+        return mSubsystems.FirstOrDefault(submodule => submodule.GetType() == subsystemType);
     }
 
     /// <summary>
-    /// 해당 엔진에 지정한 타입을 가진 서브모듈을 반환합니다.
+    /// 해당 엔진에 지정한 타입을 가진 서브시스템을 반환합니다.
     /// </summary>
-    /// <typeparam name="TSubmodule">지정할 타입.</typeparam>
-    /// <returns>지정한 타입을 가진 서브모듈. 없으면 null.</returns>
-    public TSubmodule? GetSubmodule<TSubmodule>() where TSubmodule : EngineSubmodule
+    /// <typeparam name="TSubsystem">지정할 타입.</typeparam>
+    /// <returns>지정한 타입을 가진 서브시스템. 없으면 null.</returns>
+    public TSubsystem? GetSubsystem<TSubsystem>() where TSubsystem : EngineSubsystem
     {
-        return mSubmodules.OfType<TSubmodule>().FirstOrDefault();
+        return mSubsystems.OfType<TSubsystem>().FirstOrDefault();
     }
 }

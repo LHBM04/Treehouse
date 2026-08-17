@@ -7,51 +7,26 @@ using SDL3;
 namespace Treehouse.Runtime.System.Windowing;
 
 /// <summary>
-/// 애플리케이션 내 창을 제어하는 서브모듈을 정의합니다.
+/// 애플리케이션 내 창을 제어하는 서브시스템을 정의합니다.
 /// </summary>
-public class WindowSubmodule : EngineSubmodule
+public class WindowSubsystem : EngineSubsystem
 {
     /// <summary>
-    /// 해당 서브모듈이 관리하는 모든 창.
+    /// 해당 서브시스템이 관리하는 모든 창.
     /// </summary>
     private readonly List<Window> mWindows;
 
     /// <summary>
-    /// 창이 생성될 때 호출되는 이벤트.
-    /// </summary>
-    public event Action<Window>? OnWindowCreated;
-
-    /// <summary>
-    /// 창이 닫힐 때 호출되는 이벤트.
-    /// </summary>
-    public event Action<Window>? OnWindowClosed;
-
-    /// <summary>
     /// 창이 추가될 때 호출되는 이벤트.
     /// </summary>
-    public event Action<Window>? OnWindowAdded;
+    public Action<Window>? OnWindowAdded;
 
     /// <summary>
     /// 창이 제거될 때 호출되는 이벤트.
     /// </summary>
-    public event Action<Window>? OnWindowRemoved;
+    public Action<Window>? OnWindowRemoved;
 
-    /// <summary>
-    /// 창의 위치가 변경되었을 때 호출되는 이벤트.
-    /// </summary>
-    public event Action<Window, Vector2>? OnWindowMoved;
-
-    /// <summary>
-    /// 창의 크기가 변경되었을 때 호출되는 이벤트.
-    /// </summary>
-    public event Action<Window, Vector2>? OnWindowResized;
-
-    /// <summary>
-    /// 창의 포커스 상태가 변경되었을 때 호출되는 이벤트.
-    /// </summary>
-    public event Action<Window, bool>? OnWindowFocusChanged;
-
-    public WindowSubmodule()
+    public WindowSubsystem()
     {
         mWindows = new List<Window>();
     }
@@ -67,8 +42,8 @@ public class WindowSubmodule : EngineSubmodule
 
         SDL.SetStringProperty(properties, SDL.Props.WindowCreateTitleString, options.Title);
 
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateYNumber, options.Position.X);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateXNumber, options.Position.Y);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateXNumber, options.Position.X);
+        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateYNumber, options.Position.Y);
         SDL.SetFloatProperty(properties, SDL.Props.WindowCreateWidthNumber, options.Size.X);
         SDL.SetFloatProperty(properties, SDL.Props.WindowCreateHeightNumber, options.Size.Y);
 
@@ -83,7 +58,7 @@ public class WindowSubmodule : EngineSubmodule
         SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHighPixelDensityBoolean, false);
 
         Window window = new Window(SDL.CreateWindowWithProperties(properties));
-        OnWindowCreated?.Invoke(window);
+        window?.OnCreated?.Invoke();
 
         mWindows.Add(window);
         OnWindowAdded?.Invoke(window);
@@ -92,7 +67,7 @@ public class WindowSubmodule : EngineSubmodule
     }
 
     /// <summary>
-    /// 
+    /// 지정한 창을 파괴합니다.
     /// </summary>
     /// <param name="window"></param>
     public void DestroyWindow(Window window)
@@ -127,48 +102,28 @@ public class WindowSubmodule : EngineSubmodule
             {
                 case SDL.EventType.WindowMoved:
                 {
-                    if (target != null)
-                    {
-                        OnWindowMoved?.Invoke(target, new Vector2(@event.Window.Data1, @event.Window.Data2));
-                    }
-
+                    target?.OnMoved?.Invoke(new Vector2(@event.Window.Data1, @event.Window.Data2));
                     break;
                 }
                 case SDL.EventType.WindowResized:
                 {
-                    if (target != null)
-                    {
-                        OnWindowResized?.Invoke(target, new Vector2(@event.Window.Data1, @event.Window.Data2));
-                    }
-
+                    target?.OnResized?.Invoke(new Vector2(@event.Window.Data1, @event.Window.Data2));
                     break;
                 }
                 case SDL.EventType.WindowCloseRequested:
                 {
-                    if (target != null)
-                    {
-                        OnWindowClosed?.Invoke(target);
-                        DestroyWindow(target);
-                    }
-
+                    target?.OnClosed?.Invoke();
+                    DestroyWindow(target);
                     break;
                 }
                 case SDL.EventType.WindowFocusGained:
                 {
-                    if (target != null)
-                    {
-                        OnWindowFocusChanged?.Invoke(target, true);
-                    }
-
+                    target?.OnFocusGained?.Invoke();
                     break;
                 }
                 case SDL.EventType.WindowFocusLost:
                 {
-                    if (target != null)
-                    {
-                        OnWindowFocusChanged?.Invoke(target, false);
-                    }
-
+                    target?.OnFocusLost?.Invoke();
                     break;
                 }
             }
@@ -181,7 +136,6 @@ public class WindowSubmodule : EngineSubmodule
 
         foreach (Window window in mWindows)
         {
-            window.Close();
             window.Dispose();
         }
 

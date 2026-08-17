@@ -13,13 +13,15 @@ public class Program
 
         using (Engine engine = new Engine())
         {
-            engine.AddSubmodule<WindowSubmodule>();
+            engine.AddSubsystem<WindowSubsystem>();
 
-            WindowSubmodule windowSubmodule = engine.GetSubmodule<WindowSubmodule>()!;
-            windowSubmodule.OnWindowRemoved += _ => isRunning = false;
+            WindowSubsystem windowSubmodule = engine.GetSubsystem<WindowSubsystem>()!;
 
-            windowSubmodule.CreateWindow(new WindowOptions());
-            windowSubmodule.CreateWindow(new WindowOptions());
+            Window window1 = windowSubmodule.CreateWindow(new WindowOptions());
+            window1.OnClosed += () => { isRunning = false; };
+
+            Window window2 = windowSubmodule.CreateWindow(new WindowOptions());
+            window2.OnClosed += () => { Console.WriteLine("Window 2 has been closed!");};
 
             while (isRunning)
             {
