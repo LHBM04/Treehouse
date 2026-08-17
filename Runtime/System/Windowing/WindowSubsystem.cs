@@ -56,42 +56,10 @@ public class WindowSubsystem : IEngineSubsystem
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
-    public Window CreateWindow(WindowOptions options)
+    public void AddWindow(Window window)
     {
-        uint properties = SDL.CreateProperties();
-
-        SDL.SetStringProperty(properties, SDL.Props.WindowCreateTitleString, options.Title);
-
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateXNumber, options.Position.X);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateYNumber, options.Position.Y);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateWidthNumber, options.Size.X);
-        SDL.SetFloatProperty(properties, SDL.Props.WindowCreateHeightNumber, options.Size.Y);
-
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateFullscreenBoolean, options.Flags.HasFlag(WindowFlags.Fullscreen));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateResizableBoolean, options.Flags.HasFlag(WindowFlags.Resizable));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateBorderlessBoolean, options.Flags.HasFlag(WindowFlags.Borderless));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHiddenBoolean, options.Flags.HasFlag(WindowFlags.Hidden));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateAlwaysOnTopBoolean, options.Flags.HasFlag(WindowFlags.AlwaysOnTop));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateMaximizedBoolean, options.Flags.HasFlag(WindowFlags.Maximized));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateMaximizedBoolean, options.Flags.HasFlag(WindowFlags.Minimized));
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateOpenGLBoolean, true); // TODO: 이거 테스트용이니까, 반드시 나중에 설정으로 분리할 것.
-
-        SDL.SetBooleanProperty(properties, SDL.Props.WindowCreateHighPixelDensityBoolean, false);
-
-        nint handle = SDL.CreateWindowWithProperties(properties);
-        if (handle == nint.Zero)
-        {
-            throw new Exception($"SDL 창 생성에 실패했습니다! {SDL.GetError()}");
-        }
-
-        SDL.DestroyProperties(properties);
-        SDL.GLMakeCurrent(handle, SDL.GLCreateContext(handle));
-
-        Window window = new Window(handle);
-        OnWindowCreated?.Invoke(window);
         mWindows.Add(window);
-
-        return window;
+        OnWindowCreated?.Invoke(window);
     }
 
     /// <summary>
@@ -103,7 +71,6 @@ public class WindowSubsystem : IEngineSubsystem
         if (mWindows.Remove(window))
         {
             OnWindowClosed?.Invoke(window);
-            window.Dispose();
         }
     }
 

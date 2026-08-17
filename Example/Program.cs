@@ -56,7 +56,8 @@ public class Program
                 Flags = WindowFlags.None
             };
 
-            mMainWindow = windowSubsystem.CreateWindow(windowOptions);
+            mMainWindow = Window.Create(windowOptions);
+            windowSubsystem.AddWindow(mMainWindow);
 
             mIsRunning = true;
             while (mIsRunning)
