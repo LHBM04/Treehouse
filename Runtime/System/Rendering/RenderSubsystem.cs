@@ -13,13 +13,39 @@ public class RenderSubsystem : EngineSubsystem
     /// </summary>
     private GraphicsDevice? mDevice;
 
+    /// <summary>
+    /// 해당 서브시스템이 관리하는 명령 리스트.
+    /// </summary>
+    private CommandList? mCommandList;
+
     internal override void OnInitialize()
     {
         base.OnInitialize();
     }
 
+    internal override void OnTick()
+    {
+        base.OnTick();
+
+        if (mCommandList == null)
+        {
+            throw new NullReferenceException("명령 리스트가 null입니다!");
+        }
+
+        mCommandList.Begin();
+        mCommandList.SetFramebuffer(mDevice.MainSwapchain.Framebuffer);
+        mCommandList.ClearColorTarget(0, new RgbaFloat(1, 1, 1, 1));
+        mCommandList.End();
+
+        mDevice.SubmitCommands(mCommandList);
+        mDevice.SwapBuffers(mDevice.MainSwapchain);
+    }
+
     internal override void OnRelease()
     {
+        mCommandList.Dispose();
+        mDevice.Dispose();
+
         base.OnRelease();
     }
 
@@ -49,5 +75,7 @@ public class RenderSubsystem : EngineSubsystem
             (uint)window.Size.X,
             (uint)window.Size.Y
         );
+
+        mCommandList = mDevice.ResourceFactory.CreateCommandList();
     }
 }
